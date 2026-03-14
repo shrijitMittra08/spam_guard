@@ -15,7 +15,6 @@ nltk.download('omw-1.4')
 nltk.download('punkt')
 stop_words = set(stopwords.words('english'))
 
-# Custom stopwords to remove loose URL fragments
 custom_stopwords = ['http', 'https', 'www', 'com', 'org', 'net', 'co']
 stop_words.update(custom_stopwords)
 lemmatizer = WordNetLemmatizer()
@@ -24,20 +23,33 @@ print("Loading dataset...")
 df = pd.read_csv('training_data.csv')
 df1 = pd.read_csv('testing_data.csv')
 
+print(df['label'].value_counts())
+
 df['text'] = df['text'].str.replace('Subject: ', '')
 df1['text'] = df1['text'].str.replace('Subject: ', '')
 
-df['label'] = df['label'].replace({'0': 'ham', '1': 'spam'})
+df['label'] = df['label'].replace({'0': 'ham', '1': 'spam', '2': 'spam'})
+print(df['label'].value_counts())
 df = df[df['label'].isin(['ham', 'spam'])]
 df['label'] = df['label'].replace({'ham': 0, 'spam': 1})
 
-df1['label'] = df1['label'].replace({'0': 'ham', '1': 'spam'})
+df1['label'] = df1['label'].replace({'0': 'ham', '1': 'spam', '2': 'spam'})
+print(df1['label'].value_counts())
 df1 = df1[df1['label'].isin(['ham', 'spam'])]
 df1['label'] = df1['label'].replace({'ham': 0, 'spam': 1})
+
+print(df['label'].value_counts())
+print(df1['label'].value_counts())
 
 print("Dropping duplicates...")
 df = df.drop_duplicates(subset=['text'], keep='first').reset_index(drop=True)
 df1 = df1.drop_duplicates(subset=['text'], keep='first').reset_index(drop=True)
+
+print(df['label'].value_counts())
+print(df1['label'].value_counts())
+
+df['text'] = df['text'].fillna('')
+df1['text'] = df1['text'].fillna('')
 
 print("Calculating character counts...")
 df['num_chars'] = df['text'].progress_apply(len)
@@ -51,10 +63,8 @@ print("Calculating sentence counts...")
 df['num_sentences'] = df['text'].progress_apply(lambda x: len(nltk.sent_tokenize(str(x))))
 df1['num_sentences'] = df1['text'].progress_apply(lambda x: len(nltk.sent_tokenize(str(x))))
 
-
 def clean_text(text):
-    # Added str() here just in case any completely blank cells slipped through
-    # This prevents the float attribute error
+    
     text = str(text).lower()
 
     url_regex = r'(https?:\/\/\S+|www\.\S+)'
@@ -83,24 +93,25 @@ print("Running text preprocessing...")
 df['clean_text'] = df['text'].progress_apply(clean_text)
 df1['clean_text'] = df1['text'].progress_apply(clean_text)
 
-print("Checking for nulls in clean_text:")
 print(df['clean_text'].isnull().sum())
 print(df1['clean_text'].isnull().sum())
 
-# Removing empty strings
+print(df['text'].value_counts().sum())
+print(df1['text'].value_counts().sum())
+
 df = df[df['clean_text'].str.strip() != '']
 df1 = df1[df1['clean_text'].str.strip() != '']
 
-df = df[['text', 'clean_text', 'label', 'num_chars', 'num_words', 'num_sentences']]
-df1 = df1[['text', 'label', 'clean_text', 'num_chars', 'num_words', 'num_sentences']]
+print(df['text'].value_counts().sum())
+print(df1['text'].value_counts().sum())
 
-print(df.columns)
-print(df1.columns)
+df = df[['text', 'clean_text', 'label', 'num_chars', 'num_words', 'num_sentences']]
+df1 = df1[['text', 'clean_text', 'label', 'num_chars', 'num_words', 'num_sentences']]
+
+print(df.columns.to_list())
+print(df1.columns.to_list())
 
 print("Saving preprocessed data to CSV...")
 df.to_csv('preprocessed_training_data.csv', index = False)
 df1.to_csv('preprocessed_testing_data.csv', index = False)
-# index = False: prevents new column to be added as index
 
-
-print("Data preprocessing complete.")

@@ -11,9 +11,11 @@ x1 = df1['clean_text']
 y = df['label']
 y1 = df1['label']
 
+print(x.value_counts().sum(), x1.value_counts().sum())
+
 tfidf = TfidfVectorizer(
-    max_features=5000,  # keeping only top 5,000 most frequent/important words
-    min_df=5,           # ignoring words that appear in <5 emails
+    max_features=5000,  
+    min_df=10,          
     ngram_range=(1, 1)  # (1,1) -> single words
 )
 
@@ -26,5 +28,3 @@ joblib.dump(y, 'y_training_vector.pkl')
 joblib.dump(y1, 'y_testing_vector.pkl')
 joblib.dump(tfidf, 'tfidf_vectorizer.pkl')
 
-
-#print(x_vec[0])
