@@ -30,11 +30,21 @@ print("Statistics for spam emails:")
 print()
 print(df[df['label'] == 1][['num_chars', 'num_words', 'num_sentences']].describe())
 
-plt.figure(figsize=(10, 5))
-sns.histplot(df[df['label'] == 0]['num_chars'], label='Ham',  color='green', kde=True)
-sns.histplot(df[df['label'] == 1]['num_chars'], label='Spam', color='red',   kde=True)
-plt.title('Character Count by Class')
-plt.legend()
+plt.figure(figsize=(12, 6))
+sns.histplot(
+    data=df, 
+    x='num_chars', 
+    hue='label', 
+    log_scale=True, 
+    bins=50, 
+    kde=True,
+    palette={0: 'green', 1: 'red'},
+    alpha=0.5
+)
+plt.title('Distribution of Email Lengths')
+plt.xlabel('Number of Characters (Log 10)')
+plt.ylabel('No. of emails')
+plt.legend(["Spam", "Ham"])
 plt.show()
 
 plt.figure()
