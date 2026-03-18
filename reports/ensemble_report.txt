@@ -1,0 +1,20 @@
+--- Accuracy & Log Loss ---
+Accuracy: 98.49%
+Log Loss: 0.055
+
+--- Classification Report ---
+              precision    recall  f1-score   support
+
+         Ham       0.99      0.98      0.98     48476
+        Spam       0.98      0.99      0.99     53635
+
+    accuracy                           0.98    102111
+   macro avg       0.99      0.98      0.98    102111
+weighted avg       0.98      0.98      0.98    102111
+
+
+--- Confusion Matrix ---
+True Ham  (Correctly identified ham emails): 47397
+False Spam (Incorrectly identified hams as spams): 1079
+False Ham  (Incorrectly identified spams as hams): 463
+True Spam (Correctly identified spam emails): 53172
