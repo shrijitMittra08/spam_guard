@@ -22,9 +22,9 @@ tfidf = TfidfVectorizer(
 x_vec = tfidf.fit_transform(tqdm(x, desc = 'Training: TF-IDF Vectorization'))
 x1_vec = tfidf.transform(tqdm(x1, desc = 'Testing: TF-IDF Vectorization'))
 
-joblib.dump(x_vec, 'x_training_vector.pkl')
-joblib.dump(x1_vec, 'x_testing_vector.pkl')
-joblib.dump(y, 'y_training_vector.pkl')
-joblib.dump(y1, 'y_testing_vector.pkl')
-joblib.dump(tfidf, 'tfidf_vectorizer.pkl')
+joblib.dump(x_vec, 'vectors/x_training_vector.pkl')
+joblib.dump(x1_vec, 'vectors/x_testing_vector.pkl')
+joblib.dump(y, 'vectors/y_training_vector.pkl')
+joblib.dump(y1, 'vectors/y_testing_vector.pkl')
+joblib.dump(tfidf, 'vectors/tfidf_vectorizer.pkl')
 
