@@ -44,7 +44,16 @@ spam_guard/
 │   ├── y_testing_vector.pkl
 ├── reports/
 │   ├── model_report.csv
-│   ├── ensemble_report.txt      
+│   ├── ensemble_report.txt
+├── models/
+│   ├── ensemble_report.pkl
+│   ├── model_KNN.pkl
+│   ├── model_Logistic Regression.pkl
+│   ├── model_Random Forest.pkl
+│   ├── model_Ridge Classifier.pkl
+│   ├── model_SVM Poly.pkl
+│   ├── model_SVM RBF.pkl
+│   ├── sel.pkl  
 ├── data.csv
 ├── training_data.csv
 ├── testing_data.csv
