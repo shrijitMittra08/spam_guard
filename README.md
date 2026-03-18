@@ -3,8 +3,8 @@
 Spam_Guard is an advanced, end-to-end Machine Learning pipeline designed to classify emails as **Ham (Safe)** or **Spam** with high accuracy. The project leverages Natural Language Processing (NLP) techniques, particularly TF-IDF vectorization, combined with powerful classification algorithms like Support Vector Machines (SVM) and Logistic Regression.
 
 ### 📊 Datasets
-The training and testing data for this project (including the famous **Enron Email Corpus**) can be accessed here:
-👉 [Datasets GDrive Link](https://drive.google.com/drive/folders/1xmLkKAGCCBAjuuBljmb_mwaD-Y9xZi1L?usp=drive_link)
+The training and testing data, vectors and models can be accessed here:
+👉 [Datasets, Vectors & Models GDrive Link](https://drive.google.com/drive/folders/1xmLkKAGCCBAjuuBljmb_mwaD-Y9xZi1L?usp=drive_link)
 
 ---
 
@@ -33,20 +33,28 @@ spam_guard/
 │   ├──dataset_split.ipynb
 │   ├──data_preprocessing.ipynb
 │   ├──exploratory_data_analysis.ipynb
-│   ├──data_vectorizer.ipynb                  
+│   ├──data_vectorizer.ipynb
+│   ├──model_training.ipynb
+│   ├──model_testing.ipynb
+├── vectors/                    # Located in Google Drive link
+│   ├── tfdif_vectorizer.pkl
+│   ├── x_training_vector.pkl
+│   ├── x_testing_vector.pkl
+│   ├── y_training_vector.pkl
+│   ├── y_testing_vector.pkl
+├── reports/
+│   ├── model_report.csv
+│   ├── ensemble_report.txt      
 ├── data.csv
 ├── training_data.csv
 ├── testing_data.csv
 ├── preprocessed_training_data.csv
 ├── preprocessed_testing_data.csv
-├── tfdif_vectorizer.pkl
-├── x_training_vector.pkl
-├── x_testing_vector.pkl
-├── y_training_vector.pkl
-├── y_testing_vector.pkl
 ├── dataset_creation.py
 ├── dataset_split.py
 ├── data_preprocessing.py
 ├── exploratory_data_analysis.py
-└── data_vectorizer.py
+├── data_vectorizer.py
+├── model_training.py
+└── model_testing.py
 ```
