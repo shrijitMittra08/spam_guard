@@ -23,8 +23,8 @@ print("Loaded testing vectors")
 
 
 print("Loading saved model and selector...")
-sel = joblib.load('vectors/sel.pkl')
-ensemble = joblib.load('vectors/ensemble_model.pkl')
+sel = joblib.load('models/sel.pkl')
+ensemble = joblib.load('models/ensemble_model.pkl')
 print("Loaded saved model and selector")
 
 
