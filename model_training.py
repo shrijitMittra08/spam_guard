@@ -235,7 +235,7 @@ print('Training tuned models on full training set...')
 for model_name, model in tqdm(best_models.items(), total=len(best_models), desc='Training base models'):
     model.fit(x_tr_s, y_tr)
     print(f'  Trained: {model_name}')
-    joblib.dump(model, f'model/model_{name}.pkl'))
+    joblib.dump(model, f'model/model_{model_name}.pkl'))
 
 
 # In[23]:
@@ -261,7 +261,7 @@ print('Ensemble training complete.')
 
 
 joblib.dump(ensemble, f'models/ensemble_model.pkl')
-joblib.dump(sel, f'model/sel.pkl'
+joblib.dump(sel, f'models/sel.pkl')
 print(f"Success! Model and Selector saved")
 
 
