@@ -5,6 +5,7 @@ from wordcloud import WordCloud
 from collections import Counter
 
 df = pd.read_csv('preprocessed_training_data.csv')
+df1 = pd.read_csv('preprocessed_testing_data.csv') 
 
 print(df['label'].value_counts())
 print()
@@ -20,6 +21,10 @@ print(df['label'].dtype)
 
 plt.figure()
 plt.pie(df['label'].value_counts(), labels = ['ham', 'spam'], autopct = '%0.2f')
+plt.show()
+
+plt.figure()
+plt.pie(df1['label'].value_counts(), labels = ['ham', 'spam'], autopct = '%0.2f')
 plt.show()
 
 print("Statistics for ham emails:")
