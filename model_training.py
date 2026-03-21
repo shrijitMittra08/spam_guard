@@ -1,4 +1,3 @@
-
 from sklearnex import patch_sklearn
 patch_sklearn()
 
@@ -18,21 +17,18 @@ from sklearn.svm import SVC
 from tqdm import tqdm
 
 print("Loading vectors...")
-x_tr = joblib.load('vectors/x_training_vector.pkl')
-x_te = joblib.load('vectors/x_testing_vector.pkl')
-y_tr = joblib.load('vectors/y_training_vector.pkl')
-y_te = joblib.load('vectors/y_testing_vector.pkl')
+x_tr = joblib.load('../vectors/x_training_vector.pkl')
+x_te = joblib.load('../vectors/x_testing_vector.pkl')
+y_tr = joblib.load('../vectors/y_training_vector.pkl')
+y_te = joblib.load('../vectors/y_testing_vector.pkl')
 
 print(f'x_tr shape: {x_tr.shape}')
 print(f'x_te shape: {x_te.shape}')
 print(f'y_tr length: {len(y_tr)}')
 print(f'y_te length: {len(y_te)}')
 
-
-# ## Feature Selection
-
 print("Running feature selection...")
-sel = SelectKBest(chi2, k=1000)
+sel = SelectKBest(chi2, k=2000)
 x_tr_s = sel.fit_transform(x_tr, y_tr)
 x_te_s = sel.transform(x_te)
 
@@ -45,18 +41,16 @@ y_sample = y_tr[:5000]
 print(f'x_sample shape: {x_sample.shape}')
 print(f'y_sample length: {len(y_sample)}')
 
-
-# ## Grid Search Definitions
-
 lr_grid = GridSearchCV(
-    LogisticRegression(max_iter=2000, class_weight='balanced', random_state=42),
+    LogisticRegression(max_iter=4000, class_weight='balanced', random_state=42),
     {
-        'C': [0.1, 1, 10],
-        'solver': ['liblinear', 'lbfgs'],
+        'C': [0.001, 0.01, 0.1, 1, 10, 100],
+        'solver': ['liblinear', 'lbfgs', 'saga'],
     },
     cv = 5,
     scoring = 'f1',
     n_jobs = -1,
+    verbose=2
 )
 
 print('Defined Logistic Regression grid.')
@@ -64,13 +58,14 @@ print('Defined Logistic Regression grid.')
 svm_poly_grid = GridSearchCV(
     SVC(kernel='poly', probability=True, class_weight='balanced', random_state=42),
     {
-        'C': [0.1, 1, 10],
+        'C': [0.1, 1, 10, 100],
         'degree': [2, 3],
-        'gamma': ['scale', 'auto'],
+        'gamma': ['scale', 'auto', 0.1, 0.01, 0.001],
     },
     cv=5,
     scoring='f1',
     n_jobs=-1,
+    verbose=2
 )
 
 print('Defined SVM Poly grid.')
@@ -78,40 +73,79 @@ print('Defined SVM Poly grid.')
 svm_rbf_grid = GridSearchCV(
     SVC(kernel='rbf', probability=True, class_weight='balanced', random_state=42),
     {
-        'C': [0.1, 1, 10],
-        'gamma': ['scale', 'auto'],
+        'C': [0.1, 1, 10, 100],
+        'gamma': ['scale', 'auto', 0.1, 0.01, 0.001],
     },
     cv=5,
     scoring='f1',
     n_jobs=-1,
+    verbose=2
 )
 
 print('Defined SVM RBF grid.')
 
-knn_grid = GridSearchCV(
-    KNeighborsClassifier(),
+svm_lin_grid = GridSearchCV(
+    SVC(kernel='linear', probability=True, class_weight='balanced', random_state=42),
     {
-        'n_neighbors': [3, 5, 7],
-        'weights': ['uniform', 'distance'],
-        'metric': ['minkowski', 'manhattan'],
+        'C': [0.001, 0.01, 1, 10, 100],
+
     },
     cv=5,
     scoring='f1',
     n_jobs=-1,
+    verbose=2
+)
+
+print('Defined SVM Linear grid.')
+
+params1, params2 = {
+        'n_neighbors': [3, 5, 7, 11, 15],
+        'weights': ['uniform', 'distance'],
+        'metric': ['minkowski', 'manhattan', 'euclidean'],
+        'algorithm': ["auto", "ball_tree", "kd_tree", "brute"],
+        'leaf_size': [20, 30, 40, 50],
+        'p': [1, 2]
+    }, {
+        'n_neighbors': [3, 5, 7, 11, 15],
+        'weights': ['uniform', 'distance'],
+        'metric': ['minkowski', 'manhattan', 'euclidean'],
+        'p': [1, 2]
+    }
+
+knn_grid = GridSearchCV(
+    KNeighborsClassifier(),
+    params2,
+    cv=5,
+    scoring='f1',
+    n_jobs=-1,
+    verbose=2
 )
 
 print('Defined KNN grid.')
 
-rf_grid = GridSearchCV(
-    RandomForestClassifier(random_state=42),
-    {
-        'n_estimators': [100, 200],
+params1 = {
+    'n_estimators': [100, 200, 400, 600],
+        'max_depth': [None, 10, 20, 30, 50],
+        'min_samples_split': [2, 5, 10, 20],
+        'min_samples_leaf': [1, 2, 4, 8],
+        'max_features': ['sqrt', 'log2', None],
+        'bootstrap': [True, False],
+        'class_weight': [None, 'balanced', 'balanced_subsample'],
+}
+
+params2 = {
+    'n_estimators': [100, 200],
         'max_depth': [None, 20],
         'min_samples_split': [2, 5],
-    },
+}
+
+rf_grid = GridSearchCV(
+    RandomForestClassifier(random_state=42),
+    params2,
     cv=5,
     scoring='f1',
     n_jobs=-1,
+    verbose=2
 )
 
 print('Defined Random Forest grid.')
@@ -125,41 +159,60 @@ ridge_calibrated = CalibratedClassifierCV(
 ridge_grid = GridSearchCV(
     ridge_calibrated,
     {
-        'estimator__alpha': [0.1, 1.0, 10.0],
+        'estimator__alpha': [0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
     },
     cv=5,
     scoring='f1',
     n_jobs=-1,
+    verbose=2
 )
 
 print('Defined Ridge Classifier grid.')
 
-grid_jobs = {
-    "Logistic_Regression": lr_grid,
-    "SVM_Poly": svm_poly_grid,
+grids = {
+    "Logistic Regression": lr_grid,
+    "SVM Poly": svm_poly_grid,
     "SVM RBF": svm_rbf_grid,
+    "SVM Linear": svm_lin_grid,
     "KNN": knn_grid,
-    "Random_Forest": rf_grid,
+    "Random Forest": rf_grid,
     "Ridge": ridge_grid
 }
 
-print('Tuning models...')
-for model_name, grid in tqdm(grid_jobs.items(), total=len(grid_jobs), desc='Grid search'):
+print('Tuning models on sample dataset:', flush=True)
+for model_name, grid in tqdm(grids.items(), total=len(grids), desc='Tuning models'):
+    print(f'  Tuning: {model_name}', flush=True)
     grid.fit(x_sample, y_sample)
     print(f'  Tuned: {model_name}')
-print('All grid searches complete.')
+print('Tuning models complete.')
 
 print('LR best params:', lr_grid.best_params_)
 print('SVM Poly best params:', svm_poly_grid.best_params_)
 print('SVM RBF best params:', svm_rbf_grid.best_params_)
+print('SVM Linear best params:', svm_lin_grid.best_params_)
 print('KNN best params:', knn_grid.best_params_)
 print('RF best params:', rf_grid.best_params_)
 print('Ridge best params:', ridge_grid.best_params_)
+
+cv_scores = {}
+
+for model_name, grid in tqdm(grids.items(), total=len(grids), desc='Saving CV Scores'):
+    cv_scores[model_name] = grid.best_score_
+
+lines = []
+
+with open('../cv_scores.txt', 'w') as f:
+    for model_name, cv_score in cv_scores.items():
+        lines.append(f'{model_name}: {cv_score}\n')
+    f.writelines(lines)
+
+print('Saved CV Scores')
 
 best_models = {
     'Logistic Regression': lr_grid.best_estimator_,
     'SVM Poly': svm_poly_grid.best_estimator_,
     'SVM RBF': svm_rbf_grid.best_estimator_,
+    'SVM Linear': svm_lin_grid.best_estimator_,
     'KNN': knn_grid.best_estimator_,
     'Random Forest': rf_grid.best_estimator_,
     'Ridge Classifier': ridge_grid.best_estimator_,
@@ -172,29 +225,15 @@ best_models['Random Forest'] = best_models['Random Forest'].set_params(verbose=2
 
 print('Best model objects assembled.')
 
-print('Training tuned models on full training set...')
-for model_name, model in tqdm(best_models.items(), total=len(best_models), desc='Training base models'):
+print('Training tuned models:', flush=True)
+for model_name, model in tqdm(best_models.items(), total=len(best_models), desc='Training tuned models'):
+    print(f'  Training: {model_name}', flush=True)
     model.fit(x_tr_s, y_tr)
     print(f'  Trained: {model_name}')
-    joblib.dump(model, f'model/model_{model_name}.pkl'))
+    joblib.dump(model, f'../models/model_{model_name}.pkl')
 
-print('Building ensemble...')
-ensemble = VotingClassifier(
-    estimators=[
-        ('lr', best_models['Logistic Regression']),
-        ('svm_poly', best_models['SVM Poly']),
-        ('svm_rbf', best_models['SVM RBF']),
-        ('knn', best_models['KNN']),
-        ('rf', best_models['Random Forest']),
-        ('ridge', best_models['Ridge Classifier']),
-    ],
-    voting='soft',
-)
-ensemble.fit(x_tr_s, y_tr)
-print('Ensemble training complete.')
+joblib.dump(sel, f'../models/sel.pkl')
+print(f"Selector saved")
 
-joblib.dump(ensemble, f'models/ensemble_model.pkl')
-joblib.dump(sel, f'models/sel.pkl')
-print(f"Success! Model and Selector saved")
 
 
