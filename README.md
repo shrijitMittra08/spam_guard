@@ -69,5 +69,6 @@ spam_guard/
 ├── model_training.py
 ├── model_testing.py
 ├── ensemble_build.py
-└── ensemble_testing.py
+├── ensemble_testing.py
+└── main.py                       # Actual program for SpamGuard CLI
 ```
