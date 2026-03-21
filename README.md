@@ -29,13 +29,15 @@ spam_guard/
 │   ├── email_dataset_100k.csv
 │   └── df.csv
 ├── notebooks/                  # Jupyter notebooks for EDA and testing
-│   ├──dataset_creation.ipynb
-│   ├──dataset_split.ipynb
-│   ├──data_preprocessing.ipynb
-│   ├──exploratory_data_analysis.ipynb
-│   ├──data_vectorizer.ipynb
-│   ├──model_training.ipynb
-│   ├──model_testing.ipynb
+│   ├── dataset_creation.ipynb
+│   ├── dataset_split.ipynb
+│   ├── data_preprocessing.ipynb
+│   ├── exploratory_data_analysis.ipynb
+│   ├── data_vectorizer.ipynb
+│   ├── ensemble_build.ipynb
+│   ├── ensemble_testing.ipynb
+│   ├── model_training.ipynb
+│   ├── model_testing.ipynb
 ├── vectors/                    # Located in Google Drive link
 │   ├── tfdif_vectorizer.pkl
 │   ├── x_training_vector.pkl
@@ -46,7 +48,7 @@ spam_guard/
 │   ├── model_report.csv
 │   ├── ensemble_report.txt
 ├── models/
-│   ├── ensemble_report.pkl
+│   ├── ensemble_model.pkl
 │   ├── model_KNN.pkl
 │   ├── model_Logistic Regression.pkl
 │   ├── model_Random Forest.pkl
@@ -65,5 +67,7 @@ spam_guard/
 ├── exploratory_data_analysis.py
 ├── data_vectorizer.py
 ├── model_training.py
-└── model_testing.py
+├── model_testing.py
+├── ensemble_build.py
+└── ensemble_testing.py
 ```
