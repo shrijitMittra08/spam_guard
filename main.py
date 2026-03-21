@@ -39,16 +39,21 @@ def clean_text(text):
 
     return ' '.join(clean_words)
 
-print('Initializing SpamGuard')
 print()
+
+print('Initializing SpamGuard')
 
 print('Loading models')
 
 try:
     ensemble = joblib.load('models/ensemble_model.pkl')
+    for estimator in ensemble.estimators_:
+        if hasattr(estimator, 'verbose'):
+            estimator.verbose = 0
     vectorizer = joblib.load('vectors/tfidf_vectorizer.pkl')
     sel = joblib.load('models/sel.pkl')
     print('Models loaded successfully.')
+    print()
     while True:
         try:
             text = input("Enter email (exit to quit): ")
@@ -60,8 +65,14 @@ try:
                 continue
             
             cleaned_text = clean_text(text)
+            if len(cleaned_text.split()) < 3:
+                print('Message too short to be evaluated!')
+                continue
+
             vec_text = vectorizer.transform([cleaned_text])
             features = sel.transform(vec_text)
+            if features.sum() == 0:
+                print('Message does not contain keywords to be evaluated!')
 
             pred = ensemble.predict(features)[0]
             prob = ensemble.predict_proba(features)[0]
