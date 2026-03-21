@@ -2,9 +2,9 @@
 
 Spam_Guard is an advanced, end-to-end Machine Learning pipeline designed to classify emails as **Ham (Safe)** or **Spam** with high accuracy. The project leverages Natural Language Processing (NLP) techniques, particularly TF-IDF vectorization, combined with powerful classification algorithms like Support Vector Machines (SVM) and Logistic Regression.
 
-### 📊 Datasets
+### 📊 Datasets | Vectors | Models
 The training and testing data, vectors and models can be accessed here:
-👉 [Datasets, Vectors & Models GDrive Link](https://drive.google.com/drive/folders/1xmLkKAGCCBAjuuBljmb_mwaD-Y9xZi1L?usp=drive_link)
+ [Datasets, Vectors & Models GDrive Link](https://drive.google.com/drive/folders/1xmLkKAGCCBAjuuBljmb_mwaD-Y9xZi1L?usp=drive_link)
 
 ---
 
